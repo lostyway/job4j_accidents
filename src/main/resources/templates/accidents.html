@@ -14,15 +14,15 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
-    <title>Главная</title>
+    <title>Все инциденты</title>
 </head>
 <body>
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-item nav-link active" href="/">Главная</a>
-                <a class="nav-item nav-link" th:href="@{/accidents}">Инциденты</a>
+                <a class="nav-item nav-link" href="/">Главная</a>
+                <a class="nav-item nav-link active" th:href="@{/accidents}">Инциденты</a>
                 <a class="nav-item nav-link" th:href="@{/createAccident}">Добавить Инцидент</a>
             </div>
         </div>
@@ -32,12 +32,32 @@
     </nav>
 
     <div class="container mt-4">
-        <div class="inherited-list">
-            <a class="nav-item nav-link" href="/">Главная</a>
-            <a class="nav-item nav-link" th:href="@{/accidents}">Инциденты</a>
-            <a class="nav-item nav-link" th:href="@{/createAccident}">Добавить Инцидент</a>
-            <a class="nav-item nav-link" th:href="@{/editAccident}">Редактировать Инцидент</a>
-        </div>
+        <h2>Все аварии</h2>
+        <table class="table table-bordered">
+            <thead class="thead-light">
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Адрес</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="accident : ${accidents}">
+                <td th:text="${accident.id}"></td>
+                <td th:text="${accident.name}"></td>
+                <td th:text="${accident.text}"></td>
+                <td th:text="${accident.address}"></td>
+                <td>
+                    <a class="btn btn-sm btn-primary"
+                       th:href="@{/editAccident(id=${accident.id})}">
+                        Редактировать
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 

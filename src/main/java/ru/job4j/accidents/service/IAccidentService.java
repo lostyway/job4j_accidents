@@ -6,4 +6,10 @@ import java.util.List;
 
 public interface IAccidentService {
     List<Accident> getAllAccidents();
+
+    Accident create(Accident accident);
+
+    boolean update(Accident accident);
+
+    Accident findById(int id);
 }
