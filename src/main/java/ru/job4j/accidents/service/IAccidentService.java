@@ -9,7 +9,7 @@ public interface IAccidentService {
 
     Accident create(Accident accident);
 
-    boolean update(Accident accident);
-
     Accident findById(int id);
+
+    boolean update(Accident accident);
 }

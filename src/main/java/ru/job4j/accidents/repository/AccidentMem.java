@@ -1,5 +1,8 @@
 package ru.job4j.accidents.repository;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Accident;
 
@@ -8,17 +11,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
+@RequiredArgsConstructor
+@Setter
+@Getter
 public class AccidentMem implements IAccidentRepository {
     private final Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
 
-    public AccidentMem() {
-        accidents.put(1, new Accident(1, "name", "text", "address"));
-        accidents.put(2, new Accident(2, "name2", "text2", "address2"));
-        accidents.put(3, new Accident(3, "name3", "text3", "address3"));
-        accidents.put(4, new Accident(4, "name4", "text4", "address4"));
-    }
+    private AtomicInteger accidentId = new AtomicInteger(1);
 
     @Override
     public List<Accident> getAllAccidents() {
@@ -28,6 +30,7 @@ public class AccidentMem implements IAccidentRepository {
     @Override
     public Optional<Accident> create(Accident accident) {
         try {
+            accident.setId(accidentId.getAndIncrement());
             accidents.put(accident.getId(), accident);
             return Optional.of(accident);
         } catch (Exception e) {
@@ -37,7 +40,8 @@ public class AccidentMem implements IAccidentRepository {
 
     @Override
     public boolean update(Accident accident) {
-        return accidents.put(accident.getId(), accident) != null;
+        accidents.put(accident.getId(), accident);
+        return true;
     }
 
     @Override

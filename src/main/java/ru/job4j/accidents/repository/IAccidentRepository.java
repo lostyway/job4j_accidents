@@ -10,7 +10,7 @@ public interface IAccidentRepository {
 
     Optional<Accident> create(Accident accident);
 
-    boolean update(Accident accident);
-
     Optional<Accident> findById(int id);
+
+    boolean update(Accident accident);
 }
