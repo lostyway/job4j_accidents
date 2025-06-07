@@ -5,13 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Accident;
+import ru.job4j.accidents.model.AccidentType;
+import ru.job4j.accidents.model.Rule;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,6 +19,22 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Getter
 public class AccidentMem implements IAccidentRepository {
     private final Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
+
+    private final Map<Integer, AccidentType> types = Map.of(
+            1, new AccidentType(1, "Две машины"),
+            2, new AccidentType(2, "Машина и человек"),
+            3, new AccidentType(3, "Машина и велосипед"),
+            4, new AccidentType(4, "Машина и природа"),
+            5, new AccidentType(5, "Массовое ДТП"),
+            6, new AccidentType(6, "Не указано"));
+
+    private final Map<Integer, Rule> rules = Map.of(
+            1, new Rule(1, "Статья 1"),
+            2, new Rule(2, "Статья 2"),
+            3, new Rule(3, "Статья 3"),
+            4, new Rule(4, "Статья 4"),
+            5, new Rule(5, "Статья 5"),
+            6, new Rule(6, "Статья 6"));
 
     private AtomicInteger accidentId = new AtomicInteger(1);
 
@@ -31,6 +47,7 @@ public class AccidentMem implements IAccidentRepository {
     public Optional<Accident> create(Accident accident) {
         try {
             accident.setId(accidentId.getAndIncrement());
+            setTypeAndRules(accident);
             accidents.put(accident.getId(), accident);
             return Optional.of(accident);
         } catch (Exception e) {
@@ -40,12 +57,46 @@ public class AccidentMem implements IAccidentRepository {
 
     @Override
     public boolean update(Accident accident) {
+        setTypeAndRules(accident);
         accidents.put(accident.getId(), accident);
         return true;
+    }
+
+    private Set<Rule> getRulesById(Set<Integer> rulesId) {
+        return rulesId.stream()
+                .map(rules::get)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
     }
 
     @Override
     public Optional<Accident> findById(int id) {
         return Optional.ofNullable(accidents.get(id));
+    }
+
+    public List<AccidentType> getAllTypes() {
+        return types.values().stream().
+                sorted(Comparator.comparingInt(AccidentType::getId))
+                .collect(Collectors.toList());
+    }
+
+    public List<Rule> getAllRules() {
+        return rules.values().stream()
+                .sorted(Comparator.comparingInt(Rule::getId))
+                .collect(Collectors.toList());
+    }
+
+    public AccidentType getTypeById(int id) {
+        return types.getOrDefault(id, new AccidentType(5, "Не указано"));
+    }
+
+    private void setTypeAndRules(Accident accident) {
+        if (accident.getType() != null) {
+            accident.setType(getTypeById(accident.getType().getId()));
+        }
+        if (accident.getRules() != null) {
+            Set<Integer> rulesIds = accident.getRules().stream().map(Rule::getId).collect(Collectors.toSet());
+            accident.setRules(getRulesById(rulesIds));
+        }
     }
 }

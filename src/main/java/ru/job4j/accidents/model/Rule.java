@@ -5,19 +5,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Accident {
+public class Rule {
 
     private int id;
     private String name;
-    private String text;
-    private String address;
-    private AccidentType type;
-    private Set<Rule> rules = new HashSet<>();
 }
