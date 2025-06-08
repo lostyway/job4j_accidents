@@ -45,7 +45,7 @@ public class AccidentMem implements IAccidentRepository {
     }
 
     @Override
-    public Accident create(Accident accident) {
+    public Accident create(Accident accident, Set<Integer> rIds) {
         try {
             accident.setId(accidentId.getAndIncrement());
             setTypeAndRules(accident);
@@ -57,10 +57,9 @@ public class AccidentMem implements IAccidentRepository {
     }
 
     @Override
-    public boolean update(Accident accident) {
+    public void update(Accident accident, Set<Integer> rIds) {
         setTypeAndRules(accident);
         accidents.put(accident.getId(), accident);
-        return true;
     }
 
     @Override

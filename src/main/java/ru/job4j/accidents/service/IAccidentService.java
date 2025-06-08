@@ -10,19 +10,15 @@ import java.util.Set;
 public interface IAccidentService {
     List<Accident> getAllAccidents();
 
-    Accident create(Accident accident);
+    Accident create(Accident accident, Set<Integer> rIds);
 
     Accident findById(int id);
 
-    boolean update(Accident accident);
+    void update(Accident accident, Set<Integer> rIds);
 
     List<AccidentType> getAllTypes();
 
     List<Rule> getAllRules();
 
-    Set<Rule> getRulesById(Set<Integer> rulesId);
-
-    Set<Rule> processSelectedRules(Set<Integer> rIds);
-
-    void validateAndSetFields(Accident accident, Set<Integer> rIds);
+    void validateFields(Accident accident, Set<Integer> rIds);
 }

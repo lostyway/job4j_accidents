@@ -30,8 +30,7 @@ public class AccidentController {
     public String saveAccident(@ModelAttribute Accident accident,
                                @RequestParam(value = "rIds", required = false)
                                Set<Integer> rIds) {
-        accidentService.validateAndSetFields(accident, rIds);
-        accidentService.create(accident);
+        accidentService.create(accident, rIds);
         return "redirect:/index";
     }
 
@@ -47,8 +46,7 @@ public class AccidentController {
 
     @PostMapping("/confirmEdit")
     public String confirmEdit(@ModelAttribute Accident accident, @RequestParam(value = "rIds", required = false) Set<Integer> rIds) {
-        accidentService.validateAndSetFields(accident, rIds);
-        accidentService.update(accident);
+        accidentService.update(accident, rIds);
         return "redirect:/index";
     }
 

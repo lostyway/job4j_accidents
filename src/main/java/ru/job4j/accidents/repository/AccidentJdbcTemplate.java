@@ -69,7 +69,7 @@ public class AccidentJdbcTemplate implements IAccidentRepository {
     }
 
     @Override
-    public Accident create(Accident accident) {
+    public Accident create(Accident accident, Set<Integer> rIds) {
         setTypeAndRules(accident);
         Integer generatedId = jdbc.queryForObject(
                 "insert into accidents (name, description, address, type_id) values (?,?,?,?) returning id",
@@ -85,19 +85,14 @@ public class AccidentJdbcTemplate implements IAccidentRepository {
     }
 
     @Override
-    public boolean update(Accident accident) {
-        try {
-            setTypeAndRules(accident);
-            jdbc.update("update accidents set name =?, description = ?, address = ?, type_id = ? where id = ?",
-                    accident.getName(), accident.getText(), accident.getAddress(), accident.getType().getId(), accident.getId());
+    public void update(Accident accident, Set<Integer> rIds) {
+        setTypeAndRules(accident);
+        jdbc.update("update accidents set name =?, description = ?, address = ?, type_id = ? where id = ?",
+                accident.getName(), accident.getText(), accident.getAddress(), accident.getType().getId(), accident.getId());
 
-            jdbc.update("delete from accident_rules where accident_id=?", accident.getId());
+        jdbc.update("delete from accident_rules where accident_id=?", accident.getId());
 
-            refreshAllRulesInAccident(accident);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        refreshAllRulesInAccident(accident);
     }
 
     @Override

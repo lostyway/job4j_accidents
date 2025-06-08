@@ -12,11 +12,11 @@ import java.util.stream.Collectors;
 public interface IAccidentRepository {
     List<Accident> getAllAccidents();
 
-    Accident create(Accident accident);
+    Accident create(Accident accident, Set<Integer> rIds);
+
+    void update(Accident accident, Set<Integer> rIds);
 
     Optional<Accident> findById(int id);
-
-    boolean update(Accident accident);
 
     List<AccidentType> getAllTypes();
 
