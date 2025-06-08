@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.26.xsd">
+
+    <include file="/db/scripts/001_ddl_create_types.sql"/>
+    <include file="/db/scripts/002_ddl_create_rules.sql"/>
+    <include file="/db/scripts/003_dml_insert_types.sql"/>
+    <include file="/db/scripts/004_dml_insert_rules.sql"/>
+    <include file="/db/scripts/005_ddl_create_accidents_table.sql"/>
+    <include file="/db/scripts/006_dml_insert_accidents.sql"/>
+    <include file="/db/scripts/007_ddl_create_accident_rules.sql"/>
+
+</databaseChangeLog>

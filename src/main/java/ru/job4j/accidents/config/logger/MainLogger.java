@@ -1,4 +1,4 @@
-package ru.job4j.accidents.logging;
+package ru.job4j.accidents.config.logger;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;

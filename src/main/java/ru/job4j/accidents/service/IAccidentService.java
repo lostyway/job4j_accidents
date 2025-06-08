@@ -5,6 +5,7 @@ import ru.job4j.accidents.model.AccidentType;
 import ru.job4j.accidents.model.Rule;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IAccidentService {
     List<Accident> getAllAccidents();
@@ -18,4 +19,10 @@ public interface IAccidentService {
     List<AccidentType> getAllTypes();
 
     List<Rule> getAllRules();
+
+    Set<Rule> getRulesById(Set<Integer> rulesId);
+
+    Set<Rule> processSelectedRules(Set<Integer> rIds);
+
+    void validateAndSetFields(Accident accident, Set<Integer> rIds);
 }

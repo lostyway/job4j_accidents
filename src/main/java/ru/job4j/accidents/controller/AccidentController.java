@@ -8,11 +8,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.accidents.model.Accident;
-import ru.job4j.accidents.model.Rule;
 import ru.job4j.accidents.service.AccidentService;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,8 +27,10 @@ public class AccidentController {
     }
 
     @PostMapping("/saveAccident")
-    public String saveAccident(@ModelAttribute Accident accident, @RequestParam(value = "rIds", required = false) List<Integer> rIds) {
-        accident.setRules(rIds.stream().map(i -> new Rule(i, null)).collect(Collectors.toSet()));
+    public String saveAccident(@ModelAttribute Accident accident,
+                               @RequestParam(value = "rIds", required = false)
+                               Set<Integer> rIds) {
+        accidentService.validateAndSetFields(accident, rIds);
         accidentService.create(accident);
         return "redirect:/index";
     }
@@ -46,8 +46,8 @@ public class AccidentController {
     }
 
     @PostMapping("/confirmEdit")
-    public String confirmEdit(@ModelAttribute Accident accident, @RequestParam(value = "rIds", required = false) List<Integer> rIds) {
-        accident.setRules(rIds.stream().map(i -> new Rule(i, null)).collect(Collectors.toSet()));
+    public String confirmEdit(@ModelAttribute Accident accident, @RequestParam(value = "rIds", required = false) Set<Integer> rIds) {
+        accidentService.validateAndSetFields(accident, rIds);
         accidentService.update(accident);
         return "redirect:/index";
     }

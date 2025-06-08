@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Repository;
+import ru.job4j.accidents.exception.SaveNotSuccessException;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.model.AccidentType;
 import ru.job4j.accidents.model.Rule;
@@ -44,14 +45,14 @@ public class AccidentMem implements IAccidentRepository {
     }
 
     @Override
-    public Optional<Accident> create(Accident accident) {
+    public Accident create(Accident accident) {
         try {
             accident.setId(accidentId.getAndIncrement());
             setTypeAndRules(accident);
             accidents.put(accident.getId(), accident);
-            return Optional.of(accident);
+            return accident;
         } catch (Exception e) {
-            return Optional.empty();
+            throw new SaveNotSuccessException("Не удалось сохранить инцидент");
         }
     }
 
@@ -62,7 +63,8 @@ public class AccidentMem implements IAccidentRepository {
         return true;
     }
 
-    private Set<Rule> getRulesById(Set<Integer> rulesId) {
+    @Override
+    public Set<Rule> getRulesById(Set<Integer> rulesId) {
         return rulesId.stream()
                 .map(rules::get)
                 .filter(Objects::nonNull)
@@ -80,23 +82,15 @@ public class AccidentMem implements IAccidentRepository {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<Rule> getAllRules() {
         return rules.values().stream()
                 .sorted(Comparator.comparingInt(Rule::getId))
                 .collect(Collectors.toList());
     }
 
+    @Override
     public AccidentType getTypeById(int id) {
         return types.getOrDefault(id, new AccidentType(5, "Не указано"));
-    }
-
-    private void setTypeAndRules(Accident accident) {
-        if (accident.getType() != null) {
-            accident.setType(getTypeById(accident.getType().getId()));
-        }
-        if (accident.getRules() != null) {
-            Set<Integer> rulesIds = accident.getRules().stream().map(Rule::getId).collect(Collectors.toSet());
-            accident.setRules(getRulesById(rulesIds));
-        }
     }
 }
