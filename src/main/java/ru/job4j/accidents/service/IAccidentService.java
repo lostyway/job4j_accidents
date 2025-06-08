@@ -20,5 +20,5 @@ public interface IAccidentService {
 
     List<Rule> getAllRules();
 
-    void validateFields(Accident accident, Set<Integer> rIds);
+    void validateFields(Accident accident);
 }
