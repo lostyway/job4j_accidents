@@ -26,9 +26,9 @@
                 <a class="nav-item nav-link" th:href="@{/createAccident}">Добавить Инцидент</a>
             </div>
         </div>
-        <span class="navbar-text">
-            <label th:text="${user}"></label>
-        </span>
+        <div th:if="${user != 'anonymousUser'}">
+            Login as: <span th:text="${user.username}"></span>
+        </div>
     </nav>
 
     <div class="container mt-4">

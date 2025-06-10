@@ -12,5 +12,9 @@
     <include file="/db/scripts/005_ddl_create_accidents_table.sql"/>
     <include file="/db/scripts/006_dml_insert_accidents.sql"/>
     <include file="/db/scripts/007_ddl_create_accident_rules.sql"/>
+    <include file="/db/scripts/008_ddl_create_table_users.sql"/>
+    <include file="/db/scripts/009_dml_insert_users.sql"/>
+    <include file="/db/scripts/010_ddl_create_table_authorities.sql"/>
+    <include file="/db/scripts/011.dml_insert_authorities.sql"/>
 
 </databaseChangeLog>
