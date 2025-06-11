@@ -30,9 +30,14 @@ public class AccidentController {
     @PostMapping("/saveAccident")
     public String saveAccident(@ModelAttribute Accident accident,
                                @RequestParam(value = "rIds", required = false)
-                               Set<Integer> rIds) {
-        accidentService.create(accident, rIds);
-        return "redirect:/index";
+                               Set<Integer> rIds, Model model) {
+        try {
+            accidentService.create(accident, rIds);
+            return "redirect:/index";
+        } catch (Exception e) {
+            model.addAttribute("error", "Произошла ошибка при сохранении");
+            return "errors/404";
+        }
     }
 
     @GetMapping("/editAccident")
@@ -54,9 +59,17 @@ public class AccidentController {
     }
 
     @PostMapping("/confirmEdit")
-    public String confirmEdit(@ModelAttribute Accident accident, @RequestParam(value = "rIds", required = false) Set<Integer> rIds) {
-        accidentService.update(accident, rIds);
-        return "redirect:/index";
+    public String confirmEdit(@ModelAttribute Accident accident, @RequestParam(value = "rIds", required = false) Set<Integer> rIds, Model model) {
+        try {
+            accidentService.update(accident, rIds);
+            return "redirect:/index";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "errors/404";
+        } catch (Exception e) {
+            model.addAttribute("error", "Произошла ошибка при редактировании инцидента");
+            return "errors/404";
+        }
     }
 
     @GetMapping("/accidents")
