@@ -1,9 +1,7 @@
 package ru.job4j.accidents.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,12 +37,20 @@ public class AccidentController {
 
     @GetMapping("/editAccident")
     public String editAccident(@RequestParam("id") int id, Model model) {
-        model.addAttribute("user", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        Accident accident = accidentService.findById(id);
-        model.addAttribute("accident", accident);
-        model.addAttribute("types", accidentService.getAllTypes());
-        model.addAttribute("rules", accidentService.getAllRules());
-        return "editAccident";
+        try {
+            model.addAttribute("user", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            Accident accident = accidentService.findById(id);
+            model.addAttribute("accident", accident);
+            model.addAttribute("types", accidentService.getAllTypes());
+            model.addAttribute("rules", accidentService.getAllRules());
+            return "editAccident";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "errors/404";
+        } catch (Exception e) {
+            model.addAttribute("error", "Произошло исключение!");
+            return "errors/404";
+        }
     }
 
     @PostMapping("/confirmEdit")
