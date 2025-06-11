@@ -88,20 +88,31 @@
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
-                <version>4.29.2</version>
+                <version>4.29.0</version>
                 <configuration>
-                    <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+                    <propertyFile>${liquibase.config}</propertyFile>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>update-on-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>update</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <!-- Test Profile -->
+        <profile>
+            <id>test</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <liquibase.config>src/main/resources/db/liquibase_test.properties</liquibase.config>
+            </properties>
+        </profile>
+
+        <!-- Production Profile -->
+        <profile>
+            <id>production</id>
+            <properties>
+                <liquibase.config>src/main/resources/db/liquibase.properties</liquibase.config>
+            </properties>
+        </profile>
+    </profiles>
 </project>
